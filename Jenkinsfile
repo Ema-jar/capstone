@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('Create kubernetes cluster') {
+        stage('Kubernetes cluster') {
 			steps {
 				withAWS(region:'us-west-2', credentials:'aws-kubernetes') {
 					sh '''
@@ -18,6 +18,16 @@ pipeline {
 						--zones us-west-2a \
 						--zones us-west-2b \
 						--zones us-west-2c \
+					'''
+				}
+			}
+		}
+
+        stage('Configuration file cluster') {
+			steps {
+				withAWS(region:'us-west-2', credentials:'aws-kubernetes') {
+					sh '''
+						aws eks --region us-west-2 update-kubeconfig --name EmaJarK8sCluster
 					'''
 				}
 			}
