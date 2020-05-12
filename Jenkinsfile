@@ -60,7 +60,7 @@ pipeline {
 			steps {
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub_credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]){
 					sh '''
-						docker build -t emajar/udacity_capstone .
+						docker build -f deploy/Dockerfile -t emajar/udacity_capstone .
 					'''
 				}
 			}
