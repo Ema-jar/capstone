@@ -35,10 +35,32 @@ pipeline {
 			steps {
 				withAWS(region:'us-west-2', credentials:'aws-kubernetes') {
 					sh '''
+                        which aws
+                        aws --version
 						aws eks --region us-west-2 update-kubeconfig --name EmaJarK8sCluster
 					'''
 				}
 			}
 		}
+
+
+        // stage('Lint HTML') {
+		// 	steps {
+		// 		sh 'tidy -q -e *.html'
+		// 	}
+		// }
+		
+		// stage('Build Docker Image') {
+		// 	steps {
+		// 		withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]){
+		// 			sh '''
+		// 				docker build -t mehmetincefidan/capstone .
+		// 			'''
+		// 		}
+		// 	}
+		// }
+
+
     }
 }
+
