@@ -47,7 +47,9 @@ pipeline {
 
         stage('Lint HTML') {
 			steps {
-				sh 'tidy -q -e *.html'
+                sh 'sudo apt-get update -y'
+                sh 'sudo apt-get install -y tidy'
+				sh 'tidy -q -e deploy/*.html'
 			}
 		}
 		
