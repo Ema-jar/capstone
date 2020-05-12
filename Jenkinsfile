@@ -82,7 +82,7 @@ pipeline {
 				withAWS(region:'us-west-2', credentials:'aws-kubernetes') {
 					sh '''
                         kubectl config get-contexts
-						kubectl config use-context arn:aws:eks:us-west-2:350027292717:cluster/EmaJarK8sCluster
+						kubectl config use-context EmaJarUser@EmaJarK8sCluster.us-west-2.eksctl.io
 					'''
 				}
 			}
