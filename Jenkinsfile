@@ -51,6 +51,7 @@ pipeline {
 
         stage('Lint HTML') {
 			steps {
+                sh 'psw'
 				sh 'tidy -q -e deploy/*.html'
 			}
 		}
