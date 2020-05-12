@@ -56,11 +56,23 @@ pipeline {
 			}
 		}
 		
-		stage('Build Docker Image') {
+		stage('Docker image build') {
 			steps {
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub_credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]){
 					sh '''
 						docker build -f deploy/Dockerfile -t emajar/udacity_capstone .
+					'''
+				}
+			}
+		}
+
+
+        stage('Docker image push') {
+			steps {
+				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub_credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]){
+					sh '''
+						docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+						docker push emajar/udacity_capstone
 					'''
 				}
 			}
