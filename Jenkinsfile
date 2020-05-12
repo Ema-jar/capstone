@@ -37,6 +37,7 @@ pipeline {
 					sh '''
                         which aws
                         aws --version
+                        hostname
 						aws eks --region us-west-2 update-kubeconfig --name EmaJarK8sCluster
 					'''
 				}
