@@ -81,6 +81,7 @@ pipeline {
 			steps {
 				withAWS(region:'us-west-2', credentials:'aws-kubernetes') {
 					sh '''
+                        kubectl config get-contexts
 						kubectl config use-context arn:aws:eks:us-west-2:350027292717:cluster/EmaJarK8sCluster
 					'''
 				}
