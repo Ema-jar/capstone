@@ -60,7 +60,7 @@ pipeline {
 			steps {
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub_credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]){
 					sh '''
-						docker build -f deploy/Dockerfile -t emajar/udacity_capstone .
+						docker build -t emajar/udacity_capstone .
 					'''
 				}
 			}
@@ -93,7 +93,7 @@ pipeline {
 				withAWS(region:'us-west-2', credentials:'aws-kubernetes') {
 					sh '''
                         kubectl config view
-						kubectl apply -f ./deploy/blue-controller.json
+						kubectl apply -f ./blue-controller.json
 					'''
 				}
 			}
@@ -103,7 +103,7 @@ pipeline {
 			steps {
 				withAWS(region:'us-west-2', credentials:'aws-kubernetes') {
 					sh '''
-						kubectl apply -f ./deploy/green-controller.json
+						kubectl apply -f ./green-controller.json
 					'''
 				}
 			}
