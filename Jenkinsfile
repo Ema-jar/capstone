@@ -28,18 +28,18 @@ pipeline {
 			}
 		}
 
-        // stage('Configuration file cluster') {
-		// 	steps {
-		// 		withAWS(region:'us-west-2', credentials:'aws-kubernetes') {
-		// 			sh '''
-        //                 which aws
-        //                 aws --version
-        //                 hostname
-		// 				aws eks --region us-west-2 update-kubeconfig --name EmaJarK8sCluster
-		// 			'''
-		// 		}
-		// 	}
-		// }
+        stage('Configuration file cluster') {
+			steps {
+				withAWS(region:'us-west-2', credentials:'aws-kubernetes') {
+					sh '''
+                        which aws
+                        aws --version
+                        hostname
+						aws eks --region us-west-2 update-kubeconfig --name EmaJarK8sCluster
+					'''
+				}
+			}
+		}
 
 
         stage('Lint HTML') {
