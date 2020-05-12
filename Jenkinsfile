@@ -52,7 +52,7 @@ pipeline {
         stage('Lint HTML') {
 			steps {
                 sh 'pwd'
-				sh 'tidy -q -e deploy/*.html'
+				sh 'tidy -q -e *.html'
 			}
 		}
 		
