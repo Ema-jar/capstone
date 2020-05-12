@@ -66,7 +66,6 @@ pipeline {
 			}
 		}
 
-
         stage('Docker image push') {
 			steps {
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub_credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]){
@@ -78,7 +77,15 @@ pipeline {
 			}
 		}
 
-
+        stage('Set current kubectl context') {
+			steps {
+				withAWS(region:'us-west-2', credentials:'aws-kubernetes') {
+					sh '''
+						kubectl config use-context arn:aws:eks:us-west-2:350027292717:cluster/EmaJarK8sCluster
+					'''
+				}
+			}
+		}
     }
 }
 
