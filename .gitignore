@@ -3,3 +3,5 @@
 screenshot/
 update.sh
 infra/
+key.txt
+jenkins_installer.sh
