@@ -26,6 +26,10 @@ pipeline {
                         fi
                     
                     fi
+
+                    which aws
+                    aws --version
+                    hostname
 					'''
 				}
 			}
@@ -47,8 +51,6 @@ pipeline {
 
         stage('Lint HTML') {
 			steps {
-                sh 'sudo apt-get update -y'
-                sh 'sudo apt-get install -y tidy'
 				sh 'tidy -q -e deploy/*.html'
 			}
 		}
