@@ -52,7 +52,7 @@ pipeline {
         stage('Lint HTML') {
 			steps {
                 sh 'pwd'
-				sh 'tidy -q -e deploy/*.html'
+				sh 'tidy -q -e *.html'
 			}
 		}
 		
@@ -60,7 +60,7 @@ pipeline {
 			steps {
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub_credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]){
 					sh '''
-						docker build -f deploy/Dockerfile -t emajar/udacity_capstone .
+						docker build -t emajar/udacity_capstone .
 					'''
 				}
 			}
