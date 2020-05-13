@@ -132,6 +132,17 @@ pipeline {
 				}
 			}
 		}
+
+		stage('Debug') {
+			steps {
+				withAWS(region:"${AWS_REGION}", credentials:"${AWS_CREDENTIALS}") {
+					sh '''
+						kubectl get services
+						kubbectl get pods
+					'''
+				}
+			}
+		}
     }
 }
 
