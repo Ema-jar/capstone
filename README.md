@@ -1,5 +1,7 @@
 # capstone
 
+GitHub page: https://github.com/Ema-jar/capstone
+
 This is my Capstone project implemented for the Udacity course Cloud DevOps Engineer.
 
 The project is really simple and I've decided to implement a red/blue deployment using a simple index.html file backed by nginix.
