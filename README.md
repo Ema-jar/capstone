@@ -20,4 +20,15 @@ The Jenkins pipeline is pretty standard I just added two steps to cleanup the in
 
 The first Jenkins step is executed only if the stack has not been created. I implemented this check to avoid an error.
 
+### Useful links and hints
 
+Install AWS CLI: https://docs.aws.amazon.com/eks/latest/userguide/getting-started-console.html
+Install eksctl: https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html
+Install IAM-AWS-AUTHENTICATOR: https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html
+Install docker: 
+
+I had to run the following command in order to give Jenkins the right permission:
+```
+sudo usermod -a -G docker jenkins
+sudo service jenkins restart
+```
