@@ -1,11 +1,5 @@
 pipeline {
     agent any
-	environment {
-        AWS_REGION = 'us-west-2'
-        AWS_CREDENTIALS = 'aws-kubernetes'
-        DOCKER_HUB_CREDENTIALS = 'dockerhub_credentials'
-		CLUSTER_NAME = 'EmaJarK8sCluster2'
-    }
     stages {
         stage('Kubernetes cluster') {
 			steps {
@@ -13,7 +7,7 @@ pipeline {
 					sh '''
                             
 						eksctl create cluster \
-						--name ${CLUSTER_NAME} \
+						--name EmaJarK8sCluster2 \
 						--version 1.14 \
 						--nodegroup-name standard-workers \
 						--node-type t2.small \
