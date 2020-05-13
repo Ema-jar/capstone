@@ -138,23 +138,23 @@ pipeline {
 		stage("Docker clean") {
             steps {
                 script {
-                    sh "docker system prune"
+                    sh "docker system prune --force"
                 }
             }
         }    
 
-		// Optional debugging step used to print information about the cluster
-		// stage('Debug') {
-		// 	steps {
-		// 		withAWS(region:"${AWS_REGION}", credentials:"${AWS_CREDENTIALS}") {
-		// 			sh '''
-		// 				kubectl get services
-		// 				kubectl get pods
-		// 				kubectl describe pods
-		// 			'''
-		// 		}
-		// 	}
-		// }
+		Optional debugging step used to print information about the cluster
+		stage('Debug') {
+			steps {
+				withAWS(region:"${AWS_REGION}", credentials:"${AWS_CREDENTIALS}") {
+					sh '''
+						kubectl get services
+						kubectl get pods
+						kubectl describe pods
+					'''
+				}
+			}
+		}
     }
 }
 
