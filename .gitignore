@@ -1,6 +1,5 @@
 *.pem
 .DS_Store
-screenshot/
 update.sh
 infra/
 key.txt
