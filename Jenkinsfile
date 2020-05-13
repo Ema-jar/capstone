@@ -143,7 +143,7 @@ pipeline {
             }
         }    
 
-		Optional debugging step used to print information about the cluster
+		// Optional debugging step used to print information about the cluster
 		stage('Debug') {
 			steps {
 				withAWS(region:"${AWS_REGION}", credentials:"${AWS_CREDENTIALS}") {
