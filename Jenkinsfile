@@ -4,7 +4,7 @@ pipeline {
         AWS_REGION = 'us-west-2'
         AWS_CREDENTIALS = 'aws-kubernetes'
         DOCKER_HUB_CREDENTIALS = 'dockerhub_credentials'
-		CLUSTER_NAME = 'EmaJarK8sCluster2'
+		CLUSTER_NAME = 'EmaJarK8sClusterCapstone'
     }
     stages {
         stage('Kubernetes cluster') {
