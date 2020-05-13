@@ -51,6 +51,8 @@ pipeline {
 
         stage('Lint HTML') {
 			steps {
+				sh 'ls deploy/'
+				sh 'cat deploy/index.html'
 				sh 'tidy -q -e deploy/*.html'
 			}
 		}
