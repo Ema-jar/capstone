@@ -12,12 +12,12 @@ pipeline {
 				withAWS(region:"${AWS_REGION}", credentials:"${AWS_CREDENTIALS}") {
 					sh '''
 
-						if aws cloudformation describe-stacks --stack-name eksctl-EmaJarK8sCluster2-cluster; then
+						if aws cloudformation describe-stacks --stack-name eksctl-${CLUSTER_NAME}-cluster; then
 							echo 'Stack already exists'
 						else
 							echo 'Stack is being created'
 							eksctl create cluster \
-							--name EmaJarK8sCluster2 \
+							--name ${CLUSTER_NAME} \
 							--version 1.14 \
 							--nodegroup-name standard-workers \
 							--node-type t2.small \
@@ -51,13 +51,11 @@ pipeline {
 			}
 		}
 
-
-        // stage('Lint HTML') {
-		// 	steps {
-        //         sh 'pwd'
-		// 		sh 'tidy -q -e deploy/*.html'
-		// 	}
-		// }
+        stage('Lint HTML') {
+			steps {
+				sh 'tidy -q -e deploy/*.html'
+			}
+		}
 		
 		// stage('Docker image - build') {
 		// 	steps {
