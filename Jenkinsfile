@@ -139,6 +139,8 @@ pipeline {
 					sh '''
 						kubectl get services
 						kubectl get pods
+						kubectl describe pod blue-gjql6
+						kubectl logs blue-gjql6 -p
 					'''
 				}
 			}
