@@ -1,42 +1,44 @@
 pipeline {
     agent any
+	environment {
+        AWS_REGION = 'us-west-2'
+        AWS_CREDENTIALS = 'aws-kubernetes'
+        DOCKER_HUB_CREDENTIALS = 'dockerhub_credentials'
+		CLUSTER_NAME = 'EmaJarK8sCluster2'
+    }
     stages {
         stage('Kubernetes cluster') {
 			steps {
-				withAWS(region:'us-west-2', credentials:'aws-kubernetes') {
-					// sh '''
+				withAWS(region:$AWS_REGION, credentials:$AWS_CREDENTIALS) {
+					sh '''
                             
-					// 	eksctl create cluster \
-					// 	--name EmaJarK8sCluster \
-					// 	--version 1.13 \
-					// 	--nodegroup-name standard-workers \
-					// 	--node-type t2.small \
-					// 	--nodes 2 \
-					// 	--nodes-min 1 \
-					// 	--nodes-max 3 \
-					// 	--node-ami auto \
-					// 	--region us-west-2 \
-					// 	--zones us-west-2a \
-					// 	--zones us-west-2b \
-					// 	--zones us-west-2c \
+						eksctl create cluster \
+						--name ${CLUSTER_NAME} \
+						--version 1.14 \
+						--nodegroup-name standard-workers \
+						--node-type t2.small \
+						--nodes 2 \
+						--nodes-min 1 \
+						--nodes-max 3 \
+						--node-ami auto \
+						--region us-west-2 \
+						--zones us-west-2a \
+						--zones us-west-2b \
+						--zones us-west-2c \
 
-					// 	which aws
-					// 	aws --version
-					// 	hostname
-					// '''
-					sh 'echo "Skip for now"'
+						which aws
+						aws --version
+						hostname
+					'''
 				}
 			}
 		}
 
         stage('Configuration file cluster') {
 			steps {
-				withAWS(region:'us-west-2', credentials:'aws-kubernetes') {
+				withAWS(region:$AWS_REGION, credentials:$AWS_CREDENTIALS) {
 					sh '''
-                        which aws
-                        aws --version
-                        hostname
-						aws eks --region us-west-2 update-kubeconfig --name EmaJarK8sCluster
+						aws eks --region us-west-2 update-kubeconfig --name ${CLUSTER_NAME}
 					'''
 				}
 			}
@@ -50,9 +52,9 @@ pipeline {
 			}
 		}
 		
-		stage('Docker image build') {
+		stage('Docker image - build') {
 			steps {
-				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub_credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]){
+				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: $DOCKER_HUB_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]){
 					sh '''
 						docker build -f deploy/Dockerfile -t emajar/udacity_capstone .
 					'''
@@ -60,9 +62,9 @@ pipeline {
 			}
 		}
 
-        stage('Docker image push') {
+        stage('Docker image - push') {
 			steps {
-				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub_credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]){
+				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: $DOCKER_HUB_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD']]){
 					sh '''
 						docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 						docker push emajar/udacity_capstone
@@ -71,31 +73,30 @@ pipeline {
 			}
 		}
 
-        stage('Set current kubectl context') {
+        stage('Set kubectl context') {
 			steps {
-				withAWS(region:'us-west-2', credentials:'aws-kubernetes') {
+				withAWS(region:$AWS_REGION, credentials:$AWS_CREDENTIALS) {
 					sh '''
                         kubectl config get-contexts
-						kubectl config use-context EmaJarUser@EmaJarK8sCluster.us-west-2.eksctl.io
+						kubectl config use-context arn:aws:eks:us-west-2:350027292717:cluster/${CLUSTER_NAME}
 					'''
 				}
 			}
 		}
 
-        stage('Deploy blue container') {
+        stage('Blue container - deploy') {
 			steps {
-				withAWS(region:'us-west-2', credentials:'aws-kubernetes') {
+				withAWS(region:$AWS_REGION, credentials:$AWS_CREDENTIALS) {
 					sh '''
-                        kubectl config view
 						kubectl apply -f ./deploy/blue-controller.json
 					'''
 				}
 			}
 		}
 
-        stage('Deploy green container') {
+        stage('Green container - deploy') {
 			steps {
-				withAWS(region:'us-west-2', credentials:'aws-kubernetes') {
+				withAWS(region:$AWS_REGION, credentials:$AWS_CREDENTIALS) {
 					sh '''
 						kubectl apply -f ./deploy/green-controller.json
 					'''
@@ -103,9 +104,9 @@ pipeline {
 			}
 		}
 
-        stage('Create the service in the cluster, redirect to blue') {
+        stage('Blue service - deploy') {
 			steps {
-				withAWS(region:'us-west-2', credentials:'aws-kubernetes') {
+				withAWS(region:$AWS_REGION, credentials:$AWS_CREDENTIALS) {
 					sh '''
 						kubectl apply -f ./deploy/blue-service.json
 					'''
@@ -115,13 +116,13 @@ pipeline {
 
         stage('Wait user approve') {
             steps {
-                input "Ready to redirect traffic to green?"
+                input "Do you want to switch traffic to green service?"
             }
         }
 
-        stage('Create the service in the cluster, redirect to green') {
+        stage('Green service - deploy') {
 			steps {
-				withAWS(region:'us-west-2', credentials:'aws-kubernetes') {
+				withAWS(region:$AWS_REGION, credentials:$AWS_CREDENTIALS) {
 					sh '''
 						kubectl apply -f ./deploy/green-service.json
 					'''
