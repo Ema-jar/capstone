@@ -29,9 +29,11 @@ pipeline {
 							--zones us-west-2a \
 							--zones us-west-2b \
 							--zones us-west-2c \
-						fi
 
-						
+							which aws
+							aws --version
+							hostname
+						fi
 					'''
 				}
 			}
