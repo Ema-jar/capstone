@@ -29,10 +29,6 @@ pipeline {
 							--zones us-west-2a \
 							--zones us-west-2b \
 							--zones us-west-2c \
-
-							which aws
-							aws --version
-							hostname
 						fi
 
 						
@@ -78,62 +74,62 @@ pipeline {
 			}
 		}
 
-        // stage('Set kubectl context') {
-		// 	steps {
-		// 		withAWS(region:'AWS_REGION', credentials:'AWS_CREDENTIALS') {
-		// 			sh '''
-        //                 kubectl config get-contexts
-		// 				kubectl config use-context arn:aws:eks:us-west-2:350027292717:cluster/${CLUSTER_NAME}
-		// 			'''
-		// 		}
-		// 	}
-		// }
+        stage('Set kubectl context') {
+			steps {
+				withAWS(region:"${AWS_REGION}", credentials:"${AWS_CREDENTIALS}") {
+					sh '''
+                        kubectl config get-contexts
+						kubectl config use-context arn:aws:eks:us-west-2:350027292717:cluster/${CLUSTER_NAME}
+					'''
+				}
+			}
+		}
 
-        // stage('Blue container - deploy') {
-		// 	steps {
-		// 		withAWS(region:'AWS_REGION', credentials:'AWS_CREDENTIALS') {
-		// 			sh '''
-		// 				kubectl apply -f ./deploy/blue-controller.json
-		// 			'''
-		// 		}
-		// 	}
-		// }
+        stage('Blue container - deploy') {
+			steps {
+				withAWS(region:"${AWS_REGION}", credentials:"${AWS_CREDENTIALS}") {
+					sh '''
+						kubectl apply -f ./deploy/blue-controller.json
+					'''
+				}
+			}
+		}
 
-        // stage('Green container - deploy') {
-		// 	steps {
-		// 		withAWS(region:'AWS_REGION', credentials:'AWS_CREDENTIALS') {
-		// 			sh '''
-		// 				kubectl apply -f ./deploy/green-controller.json
-		// 			'''
-		// 		}
-		// 	}
-		// }
+        stage('Green container - deploy') {
+			steps {
+				withAWS(region:"${AWS_REGION}", credentials:"${AWS_CREDENTIALS}") {
+					sh '''
+						kubectl apply -f ./deploy/green-controller.json
+					'''
+				}
+			}
+		}
 
-        // stage('Blue service - deploy') {
-		// 	steps {
-		// 		withAWS(region:'AWS_REGION', credentials:'AWS_CREDENTIALS') {
-		// 			sh '''
-		// 				kubectl apply -f ./deploy/blue-service.json
-		// 			'''
-		// 		}
-		// 	}
-		// }
+        stage('Blue service - deploy') {
+			steps {
+				withAWS(region:"${AWS_REGION}", credentials:"${AWS_CREDENTIALS}") {
+					sh '''
+						kubectl apply -f ./deploy/blue-service.json
+					'''
+				}
+			}
+		}
 
-        // stage('Wait user approve') {
-        //     steps {
-        //         input "Do you want to switch traffic to green service?"
-        //     }
-        // }
+        stage('Wait user approve') {
+            steps {
+                input "Do you want to switch traffic to green service?"
+            }
+        }
 
-        // stage('Green service - deploy') {
-		// 	steps {
-		// 		withAWS(region:'AWS_REGION', credentials:'AWS_CREDENTIALS') {
-		// 			sh '''
-		// 				kubectl apply -f ./deploy/green-service.json
-		// 			'''
-		// 		}
-		// 	}
-		// }
+        stage('Green service - deploy') {
+			steps {
+				withAWS(region:"${AWS_REGION}", credentials:"${AWS_CREDENTIALS}") {
+					sh '''
+						kubectl apply -f ./deploy/green-service.json
+					'''
+				}
+			}
+		}
     }
 }
 
