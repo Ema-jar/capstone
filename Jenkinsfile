@@ -11,20 +11,24 @@ pipeline {
 			steps {
 				withAWS(region:"${AWS_REGION}", credentials:"${AWS_CREDENTIALS}") {
 					sh '''
-                            
-						eksctl create cluster \
-						--name EmaJarK8sCluster2 \
-						--version 1.14 \
-						--nodegroup-name standard-workers \
-						--node-type t2.small \
-						--nodes 2 \
-						--nodes-min 1 \
-						--nodes-max 3 \
-						--node-ami auto \
-						--region us-west-2 \
-						--zones us-west-2a \
-						--zones us-west-2b \
-						--zones us-west-2c \
+
+						if aws cloudformation describe-stacks --stack-name EmaJarK8sCluster2; then
+							echo 'Exists'
+						fi
+
+						// eksctl create cluster \
+						// --name EmaJarK8sCluster2 \
+						// --version 1.14 \
+						// --nodegroup-name standard-workers \
+						// --node-type t2.small \
+						// --nodes 2 \
+						// --nodes-min 1 \
+						// --nodes-max 3 \
+						// --node-ami auto \
+						// --region us-west-2 \
+						// --zones us-west-2a \
+						// --zones us-west-2b \
+						// --zones us-west-2c \
 
 						which aws
 						aws --version
